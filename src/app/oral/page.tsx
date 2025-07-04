@@ -1,17 +1,17 @@
-// src/app/page.tsx
+// src/app/oral/page.tsx
 'use client'
 import React from 'react';
-import HeroSection from '@/components/sections/HeroSection';
 import { useColors } from '@/config/colors';
+import OralDiagnosisInterface from '@/components/oral/OralDiagnosisInterface';
 
-const HomePage: React.FC = () => {
+const OralPage: React.FC = () => {
   const colors = useColors();
   
   return (
     <main className={`${colors.bgPrimary} min-h-screen`}>
-      <HeroSection />
+      <OralDiagnosisInterface />
     </main>
   );
 };
 
-export default HomePage;
+export default OralPage;

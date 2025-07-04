@@ -87,6 +87,15 @@ const ReportModal: React.FC<ReportModalProps> = ({
 }) => {
   const colors = useColors();
   
+  // Safety check for patientData
+  const safePatientData = patientData || {
+    name: '未选择患者',
+    id: 'N/A',
+    history: '无',
+    date: 'N/A',
+    result: '未检测'
+  };
+  
   if (!isOpen) return null;
   
   return (
@@ -112,21 +121,21 @@ const ReportModal: React.FC<ReportModalProps> = ({
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className={colors.textSecondary}>患者姓名:</span>
-                    <span className={colors.textPrimary}>{patientData.name}</span>
+                    <span className={colors.textPrimary}>{safePatientData.name}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className={colors.textSecondary}>历史诊断:</span>
-                    <span className={colors.textPrimary}>{patientData.history}</span>
+                    <span className={colors.textPrimary}>{safePatientData.history}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className={colors.textSecondary}>主病案号:</span>
-                    <span className={colors.textPrimary}>{patientData.id}</span>
+                    <span className={colors.textPrimary}>{safePatientData.id}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className={colors.textSecondary}>诊断时间:</span>
-                    <span className={colors.textPrimary}>{patientData.date}</span>
+                    <span className={colors.textPrimary}>{safePatientData.date}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className={colors.textSecondary}>活检确认:</span>
@@ -145,7 +154,7 @@ const ReportModal: React.FC<ReportModalProps> = ({
                   辅助诊断结果
                 </h4>
                 <p className={`${colors.textPrimary} mb-4`}>
-                  {patientData.result}
+                  {safePatientData.result}
                 </p>
                 
                 <h4 className={`font-medium ${colors.textPrimary} mb-2`}>

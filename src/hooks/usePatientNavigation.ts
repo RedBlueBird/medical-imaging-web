@@ -16,6 +16,17 @@ interface UsePatientNavigationReturn {
   currentPatientData: Patient;
 }
 
+// Default patient data to prevent undefined errors
+const defaultPatient: Patient = {
+  name: '未选择患者',
+  id: 'N/A',
+  history: '无',
+  date: 'N/A',
+  result: '未检测',
+  biopsyConfirmed: false,
+  doctor: 'N/A'
+};
+
 export const usePatientNavigation = ({
   currentPatient,
   patients,
@@ -36,7 +47,7 @@ export const usePatientNavigation = ({
   
   const canGoPrev = currentPatient > 0;
   const canGoNext = currentPatient < patients.length - 1;
-  const currentPatientData = patients[currentPatient];
+  const currentPatientData = patients[currentPatient] || defaultPatient;
   
   return {
     handlePrevPatient,

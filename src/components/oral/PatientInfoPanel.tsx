@@ -31,6 +31,15 @@ const PatientInfoPanel: React.FC<PatientInfoPanelProps> = ({
 }) => {
   const colors = useColors();
   
+  // Safety check for patientData
+  const safePatientData = patientData || {
+    name: '未选择患者',
+    id: 'N/A',
+    history: '无',
+    date: 'N/A',
+    result: '未检测'
+  };
+  
   return (
     <div className="space-y-6">
       {/* Patient Navigation */}
@@ -61,19 +70,19 @@ const PatientInfoPanel: React.FC<PatientInfoPanelProps> = ({
         <div className="space-y-3">
           <div className="flex justify-between">
             <span className={colors.textSecondary}>患者:</span>
-            <span className={colors.textPrimary}>{patientData.name}</span>
+            <span className={colors.textPrimary}>{safePatientData.name}</span>
           </div>
           <div className="flex justify-between">
             <span className={colors.textSecondary}>主病案号:</span>
-            <span className={colors.textPrimary}>{patientData.id}</span>
+            <span className={colors.textPrimary}>{safePatientData.id}</span>
           </div>
           <div className="flex justify-between">
             <span className={colors.textSecondary}>历史诊断:</span>
-            <span className={colors.textPrimary}>{patientData.history}</span>
+            <span className={colors.textPrimary}>{safePatientData.history}</span>
           </div>
           <div className="flex justify-between">
             <span className={colors.textSecondary}>时间:</span>
-            <span className={colors.textPrimary}>{patientData.date}</span>
+            <span className={colors.textPrimary}>{safePatientData.date}</span>
           </div>
         </div>
       </GlassCard>
@@ -82,7 +91,7 @@ const PatientInfoPanel: React.FC<PatientInfoPanelProps> = ({
       {detectionComplete && (
         <GlassCard className="p-6">
           <h3 className={`text-lg font-semibold ${colors.textPrimary} mb-4`}>
-            辅助诊断结果: {patientData.result}
+            辅助诊断结果: {safePatientData.result}
           </h3>
           <div className="space-y-4">
             <div>

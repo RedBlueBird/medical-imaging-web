@@ -12,9 +12,9 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   
   const navItems = [
-    // { path: '/#features', label: 'Features' },
-    // { path: '/#about', label: 'About' },
-    // { path: '/#contact', label: 'Contact' },
+    { path: '/#features', label: 'Features' },
+    { path: '/#about', label: 'About' },
+    { path: '/#contact', label: 'Contact' },
   ];
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const Header: React.FC = () => {
             
             {/* Desktop Navigation - Right Aligned */}
             <div className="hidden md:flex items-center gap-8">
-              <nav className="flex items-center gap-8">
+              {/* <nav className="flex items-center gap-8">
                 {navItems.map((item) => (
                   <a 
                     key={item.path}
@@ -58,7 +58,7 @@ const Header: React.FC = () => {
                     {item.label}
                   </a>
                 ))}
-              </nav>
+              </nav> */}
               
               <ThemeToggle />
             </div>
@@ -82,7 +82,7 @@ const Header: React.FC = () => {
         </div>
         
         {/* Mobile Menu */}
-        {mobileMenuOpen && (
+        {/* {mobileMenuOpen && (
           <div className={`md:hidden ${colors.glassOverlay} border-t ${colors.glassBorder}`}>
             <div className="container mx-auto px-4 py-4">
               <nav className="flex flex-col gap-4">
@@ -99,7 +99,7 @@ const Header: React.FC = () => {
               </nav>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </header>
   );

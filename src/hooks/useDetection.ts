@@ -1,7 +1,7 @@
 // hooks/useDetection.ts
 import { useCallback } from 'react';
 import { simulateDetection } from '../utils/detection';
-import { DetectionResults } from '../types/oral.types.ts';
+import { DetectionResults } from '../types/oral';
 
 interface UseDetectionProps {
   selectedImage: string | null;

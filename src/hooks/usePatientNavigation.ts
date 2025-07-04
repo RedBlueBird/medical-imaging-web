@@ -1,6 +1,6 @@
 // hooks/usePatientNavigation.ts
 import { useCallback } from 'react';
-import { Patient } from '../types/patient.types';
+import { Patient } from '../types/patient';
 
 interface UsePatientNavigationProps {
   currentPatient: number;

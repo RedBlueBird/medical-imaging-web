@@ -1,5 +1,5 @@
 // data/mockPatients.ts
-import { Patient } from '../types/patient.types';
+import { Patient } from '../types/patient';
 
 export const mockPatients: Patient[] = [
   {

@@ -24,7 +24,7 @@ export interface DetectionStatus {
  * Simulate AI detection process
  */
 export const simulateDetection = (
-  imageFile: File,
+  imageData: string,
   onProgress?: (status: DetectionStatus) => void
 ): Promise<DetectionResults> => {
   return new Promise((resolve, reject) => {

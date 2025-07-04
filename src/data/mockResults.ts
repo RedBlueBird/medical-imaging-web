@@ -1,5 +1,5 @@
 // data/mockResults.ts
-import { DetectionResults, DiagnosisRecommendation } from '../types/oral.types';
+import { DetectionResults, DiagnosisRecommendation } from '../types/oral';
 
 export const mockResults: DetectionResults = {
   OLP: 0.184,

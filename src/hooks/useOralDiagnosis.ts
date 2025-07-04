@@ -1,6 +1,5 @@
 // hooks/useOralDiagnosis.ts
 import { useState, useCallback } from 'react';
-import { Patient, DiagnosisState, MockResults } from '../types/oral.types.ts';
 
 interface UseOralDiagnosisReturn {
   // State
@@ -44,7 +43,7 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
   const [expandedResults, setExpandedResults] = useState(false);
   
   // Computed values
-  const buttonsEnabled = selectedImage && detectionComplete;
+  const buttonsEnabled = Boolean(selectedImage && detectionComplete);
   
   return {
     // State

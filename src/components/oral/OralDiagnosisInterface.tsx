@@ -34,22 +34,42 @@ const OralDiagnosisInterface: React.FC = () => {
     selectedImage,
     isDetecting,
     detectionComplete,
+    currentPatient,
     expandedResults,
+    showInstructions,
+    showError,
+    showKnowledge,
+    showReport,
+    setSelectedImage,
+    setDetectionComplete,
+    setShowError,
+    setShowInstructions,
+    setShowKnowledge,
+    setShowReport,
     setExpandedResults,
-    handleStartDetection
+    buttonsEnabled
   } = useOralDiagnosis();
   
-  const { handleFileUpload } = useFileUpload();
-  const { currentPatient, currentPatientData, handlePrevPatient, handleNextPatient } = usePatientNavigation();
+  // Create detection handler
+  const handleStartDetection = () => {
+    // TODO: Implement detection logic
+    console.log('Starting detection...');
+  };
   
-  // Modal states
-  const [showInstructions, setShowInstructions] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [showKnowledge, setShowKnowledge] = useState(false);
-  const [showReport, setShowReport] = useState(false);
+  const { handleFileUpload } = useFileUpload({
+    onImageSelect: setSelectedImage,
+    onDetectionReset: () => setDetectionComplete(false),
+    onError: (error: string) => setShowError(true) // Convert string error to boolean
+  });
   
-  // Check if all buttons should be enabled
-  const buttonsEnabled = selectedImage && detectionComplete;
+  const { handlePrevPatient, handleNextPatient, currentPatientData } = usePatientNavigation({
+    currentPatient,
+    patients: [], // You'll need to provide patient data
+    onPatientChange: () => {} // You'll need to implement this
+  });
+  
+  // Check if all buttons should be enabled - use the computed value from hook
+  // const buttonsEnabled = selectedImage && detectionComplete;
   
   return (
     <div className={`min-h-screen ${colors.bgPrimary} relative overflow-hidden`}>
@@ -86,7 +106,10 @@ const OralDiagnosisInterface: React.FC = () => {
               <div className="space-y-4">
                 <ImageUploadArea 
                   selectedImage={selectedImage}
-                  onFileUpload={handleFileUpload}
+                  mockResults={{ OLP: 0.184, OLK: 0.651, OOML: 0.121 }} // Mock data
+                  detectionComplete={detectionComplete}
+                  expandedResults={expandedResults}
+                  onExpandedResults={setExpandedResults}
                 />
                 
                 {/* Detection Results */}
@@ -125,8 +148,12 @@ const OralDiagnosisInterface: React.FC = () => {
                 
                 {/* Patient Info Panel */}
                 <PatientInfoPanel 
-                  currentPatientData={currentPatientData}
+                  currentPatient={currentPatient}
+                  patientData={currentPatientData}
+                  totalPatients={2} // Assuming 2 patients total
                   detectionComplete={detectionComplete}
+                  onPrevPatient={handlePrevPatient}
+                  onNextPatient={handleNextPatient}
                 />
               </div>
             </div>
@@ -136,6 +163,10 @@ const OralDiagnosisInterface: React.FC = () => {
               selectedImage={selectedImage}
               isDetecting={isDetecting}
               onStartDetection={handleStartDetection}
+              onGoBack={() => {
+                // TODO: Implement go back logic
+                console.log('Going back...');
+              }}
             />
           </GlassCard>
         </div>
@@ -160,7 +191,20 @@ const OralDiagnosisInterface: React.FC = () => {
       <ReportModal 
         isOpen={showReport}
         onClose={() => setShowReport(false)}
-        currentPatientData={currentPatientData}
+        patientData={currentPatientData}
+        reportConfirmed={false} // You'll need to manage this state
+        onReportConfirmedChange={(confirmed) => {
+          // TODO: Implement report confirmation logic
+          console.log('Report confirmed:', confirmed);
+        }}
+        onDownloadReport={() => {
+          // TODO: Implement download logic
+          console.log('Downloading report...');
+        }}
+        onPrintReport={() => {
+          // TODO: Implement print logic
+          console.log('Printing report...');
+        }}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 // data/medicalKnowledge.ts
-import { KnowledgeSection } from '../types/oral.types';
+import { KnowledgeSection } from '../types/oral';
 
 export const oralKnowledgeData: KnowledgeSection[] = [
   {

@@ -1,18 +1,24 @@
 // src/components/sections/HeroSection.tsx
 'use client'
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useColors } from '@/config/colors';
 import FloatingAsset from '@/components/ui/FloatingAsset';
 import GlassCard from '@/components/ui/GlassCard';
 
 const HeroSection: React.FC = () => {
   const colors = useColors();
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 500);
     return () => clearTimeout(timer);
   }, []);
+  
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
   
   return (
     <section className={`min-h-screen ${colors.bgPrimary} relative overflow-hidden flex items-center justify-center pt-30 pb-30`}>
@@ -49,7 +55,7 @@ const HeroSection: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
               <FloatingAsset delay={0.5} amplitude={15}>
                 <button 
-                  onClick={() => window.location.href = '/oral'}
+                  onClick={() => handleNavigation('/oral')}
                   className="w-full transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                 >
                   <GlassCard className="w-full h-40 p-6 hover:bg-white/20 transition-colors duration-200">
@@ -65,7 +71,7 @@ const HeroSection: React.FC = () => {
               
               <FloatingAsset delay={0.75} amplitude={25}>
                 <button 
-                  onClick={() => window.location.href = '/gastritis'}
+                  onClick={() => handleNavigation('/gastritis')}
                   className="w-full transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                 >
                   <GlassCard className="w-full h-40 p-6 hover:bg-white/20 transition-colors duration-200">
@@ -84,7 +90,7 @@ const HeroSection: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <FloatingAsset delay={1.0} amplitude={20}>
                 <button 
-                  onClick={() => window.location.href = '/immunohistochemistry'}
+                  onClick={() => handleNavigation('/immunohistochemistry')}
                   className="w-full transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                 >
                   <GlassCard className="w-full h-40 p-6 hover:bg-white/20 transition-colors duration-200">
@@ -100,7 +106,7 @@ const HeroSection: React.FC = () => {
               
               <FloatingAsset delay={1.25} amplitude={18}>
                 <button 
-                  onClick={() => window.location.href = '/chemotherapy'}
+                  onClick={() => handleNavigation('/chemotherapy')}
                   className="w-full transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                 >
                   <GlassCard className="w-full h-40 p-6 hover:bg-white/20 transition-colors duration-200">

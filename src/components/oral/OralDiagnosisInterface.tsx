@@ -123,29 +123,6 @@ const OralDiagnosisInterface: React.FC = () => {
               
               {/* Right Side - Patient Info and Results */}
               <div className="space-y-6">
-                {/* Patient Navigation */}
-                <div className="flex items-center justify-between">
-                  <button
-                    onClick={handlePrevPatient}
-                    disabled={currentPatient === 0}
-                    className={`p-3 rounded-lg ${currentPatient === 0 ? 'bg-gray-500/50 cursor-not-allowed' : colors.buttonGhost} transition-colors`}
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  
-                  <span className={`${colors.textPrimary} font-medium`}>
-                    前一患者 | 后一患者
-                  </span>
-                  
-                  <button
-                    onClick={handleNextPatient}
-                    disabled={currentPatient === 1} // Assuming 2 patients total
-                    className={`p-3 rounded-lg ${currentPatient === 1 ? 'bg-gray-500/50 cursor-not-allowed' : colors.buttonGhost} transition-colors`}
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-                
                 {/* Patient Info Panel */}
                 <PatientInfoPanel 
                   currentPatient={currentPatient}

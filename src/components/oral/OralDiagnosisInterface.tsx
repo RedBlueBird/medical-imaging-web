@@ -82,7 +82,7 @@ const OralDiagnosisInterface: React.FC = () => {
       
       <div className="relative z-10 container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mt-16 mb-8">
           <h1 className={`text-4xl font-bold ${colors.textPrimary} mb-4`}>
             口腔黏膜潜在恶性疾病自动化诊断平台
           </h1>

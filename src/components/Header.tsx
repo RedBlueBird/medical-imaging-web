@@ -39,10 +39,10 @@ const Header: React.FC = () => {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-10 h-10 bg-blue-500 rounded-lg transition-transform duration-300 group-hover:scale-110">
-              </div>
-              <span className={`text-xl font-bold ${colors.textPrimary} transition-colors`}>
-                Placeholder Name
+              {/* <div className="w-10 h-10 bg-blue-500 rounded-lg transition-transform duration-300 group-hover:scale-110">
+              </div> */}
+              <span className={`text-xl font-bold ${colors.textPrimary} transition-colors ml-6`}>
+                AI医学影像综合检测平台
               </span>
             </Link>
             

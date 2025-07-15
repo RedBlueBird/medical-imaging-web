@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Medical Imaging Diagnosis Platform
 
-## Getting Started
+A comprehensive AI-powered medical imaging platform for automated diagnosis of gastritis and oral mucosal diseases. This application enables healthcare professionals to upload medical images and receive AI-assisted diagnostic insights through an intuitive web interface.
 
-First, run the development server:
+## 🩺 Features
 
+### Multi-Modal Diagnosis Support
+- **Gastritis Diagnosis**: Automated analysis of gastroscopic images, pathology reports, and laboratory test results
+- **Oral Diagnosis**: AI-powered detection of oral mucosal lesions and potentially malignant disorders
+
+## 🏗️ Architecture
+
+This is a full-stack monorepo application built with:
+
+### Frontend
+- **Framework**: Next.js 14 with App Router
+- **Styling**: Tailwind CSS
+- **Language**: TypeScript
+- **UI Components**: Custom components with modern design
+
+### Backend
+- **Framework**: Express.js
+- **Language**: TypeScript
+- **Database**: PostgreSQL/MongoDB (configurable)
+- **File Storage**: Local storage with cloud storage options
+- **AI Services**: Custom AI/ML services for image analysis
+
+### Shared Packages
+- **shared-types**: Common TypeScript definitions
+- **shared-utils**: Utility functions and validations
+- **shared-config**: ESLint, Prettier, and build configurations
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18.x or higher
+- Yarn or npm
+- PostgreSQL (if using SQL database)
+- Docker (optional, for containerized deployment)
+
+### Installation
+
+1. **Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd medical-imaging-monorepo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies**
+```bash
+yarn install
+# or
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Start the development servers**
+```bash
+# Start both frontend and backend
+yarn dev
+# or
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application will be available at:
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:5000`
 
-## Learn More
+## 🤝 Contributing
 
-To learn more about Next.js, take a look at the following resources:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**⚠️ Medical Disclaimer**: This application is designed to assist healthcare professionals and should not replace professional medical judgment. All diagnostic results should be reviewed by qualified medical personnel.

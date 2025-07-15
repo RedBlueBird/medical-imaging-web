@@ -110,6 +110,7 @@ const OralDiagnosisInterface: React.FC = () => {
                   detectionComplete={detectionComplete}
                   expandedResults={expandedResults}
                   onExpandedResults={setExpandedResults}
+                  onFileUpload={handleFileUpload} // Add this prop
                 />
                 
                 {/* Detection Results */}
@@ -140,10 +141,6 @@ const OralDiagnosisInterface: React.FC = () => {
               selectedImage={selectedImage}
               isDetecting={isDetecting}
               onStartDetection={handleStartDetection}
-              onGoBack={() => {
-                // TODO: Implement go back logic
-                console.log('Going back...');
-              }}
             />
           </GlassCard>
         </div>

@@ -1,5 +1,6 @@
 // src/components/oral/BottomControls.tsx
 import React from 'react';
+import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useColors } from '@/config/colors';
 
@@ -7,7 +8,7 @@ interface BottomControlsProps {
   selectedImage: string | null;
   isDetecting: boolean;
   onStartDetection: () => void;
-  onGoBack: () => void;
+  onGoBack?: () => void; // Made optional since we're using Link now
 }
 
 const BottomControls: React.FC<BottomControlsProps> = ({
@@ -20,13 +21,13 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   
   return (
     <div className="flex justify-between items-center mt-8">
-      <button
-        onClick={onGoBack}
-        className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${colors.buttonGhost} ${colors.textLight} border ${colors.glassBorder} flex items-center gap-2`}
+      <Link 
+        href="/"
+        className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${colors.buttonGhost} ${colors.textLight} border ${colors.glassBorder} flex items-center gap-2 no-underline`}
       >
         <ArrowLeft className="w-5 h-5" />
         返回
-      </button>
+      </Link>
       
       <button
         onClick={onStartDetection}

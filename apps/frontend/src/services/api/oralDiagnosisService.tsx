@@ -1,0 +1,114 @@
+import { Upload } from "lucide-react";
+
+// src/services/api/oralDiagnosisService.ts
+export interface OralDiagnosisRequest {
+  patientId: string;
+  imageUrl: string;
+  filename?: string;
+}
+
+export interface OralDiagnosisResponse {
+  success: boolean;
+  data: {
+    id: string;
+    patientId: string;
+    type: 'oral';
+    imageUrl: string;
+    results: {
+      OLP: number;
+      OLK: number;
+      OOML: number;
+      confidence: number;
+      findings: string[];
+      recommendation: string;
+      severity: 'low' | 'medium' | 'high';
+    };
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+}
+
+export interface UploadImageResponse {
+  success: boolean;
+  imageUrl: string;
+  filename: string;
+}
+
+class OralDiagnosisService {
+  private readonly baseUrl: string;
+
+  constructor(baseUrl: string = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api') {
+    this.baseUrl = baseUrl;
+  }
+
+  /**
+   * Upload image for oral diagnosis
+   */
+  async uploadImage(file: File): Promise<UploadImageResponse> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const url = `${this.baseUrl}/upload/image`;
+    console.log('Uploading to:', url); // Debug log
+    
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `Upload failed: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Image upload error:', error);
+      throw new Error(error instanceof Error ? error.message : 'Failed to upload image');
+    }
+  }
+
+  /**
+   * Analyze oral image for diagnosis
+   */
+  async analyzeOralImage(patientId: string, imageFile: File): Promise<OralDiagnosisResponse> {
+    try {
+      // First upload the image
+      // const uploadResult = await this.uploadImage(imageFile);
+      const uploadResult = {imageUrl: 'https://picsum.photos/200/300', filename: imageFile.name}; // Mocked upload result for testing
+
+      // Then send for analysis
+      const analysisRequest: OralDiagnosisRequest = {
+        patientId: patientId,
+        imageUrl: uploadResult.imageUrl,
+        filename: uploadResult.filename
+      };
+
+      console.log('Analysis request:', analysisRequest); // Debug log
+
+      const response = await fetch(`${this.baseUrl}/diagnosis/oral`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(analysisRequest),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `Analysis failed: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Oral diagnosis error:', error);
+      throw new Error(error instanceof Error ? error.message : 'Failed to analyze oral image');
+    }
+  }
+}
+
+// Create singleton instance
+export const oralDiagnosisService = new OralDiagnosisService();

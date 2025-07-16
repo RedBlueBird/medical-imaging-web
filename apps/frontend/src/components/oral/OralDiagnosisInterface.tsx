@@ -16,7 +16,6 @@ import ReportModal from '@/components/oral/modals/ReportModal';
 
 // Section imports
 import ImageUploadArea from '@/components/oral/ImageUploadArea';
-import PatientInfoPanel from '@/components/oral/PatientInfoPanel';
 import DiagnosisResults from '@/components/oral/DiagnosisResults';
 import ControlButtons from '@/components/oral/ControlButtons';
 import BottomControls from '@/components/oral/BottomControls';
@@ -32,33 +31,37 @@ const OralDiagnosisInterface: React.FC = () => {
   // State management using custom hooks
   const {
     selectedImage,
+    selectedFile,
     isDetecting,
     detectionComplete,
+    detectionResults,
+    diagnosisResponse,
     currentPatient,
     expandedResults,
     showInstructions,
     showError,
     showKnowledge,
     showReport,
-    setSelectedImage,
-    setDetectionComplete,
+    reportConfirmed,
+    error,
+    buttonsEnabled,
+    canStartDetection,
+    currentPatientId,
+    handleImageSelect,
+    handleDetectionStart,
+    handleDetectionComplete,
+    handleReset,
     setShowError,
     setShowInstructions,
     setShowKnowledge,
     setShowReport,
     setExpandedResults,
-    buttonsEnabled
+    setReportConfirmed
   } = useOralDiagnosis();
   
-  // Create detection handler
-  const handleStartDetection = () => {
-    // TODO: Implement detection logic
-    console.log('Starting detection...');
-  };
-  
   const { handleFileUpload } = useFileUpload({
-    onImageSelect: setSelectedImage,
-    onDetectionReset: () => setDetectionComplete(false),
+    onImageSelect: handleImageSelect,
+    onDetectionReset: handleReset,
     onError: (error: string) => setShowError(true) // Convert string error to boolean
   });
   
@@ -67,9 +70,6 @@ const OralDiagnosisInterface: React.FC = () => {
     patients: [], // You'll need to provide patient data
     onPatientChange: () => {} // You'll need to implement this
   });
-  
-  // Check if all buttons should be enabled - use the computed value from hook
-  // const buttonsEnabled = selectedImage && detectionComplete;
   
   return (
     <div className={`min-h-screen ${colors.bgPrimary} relative overflow-hidden`}>
@@ -96,13 +96,12 @@ const OralDiagnosisInterface: React.FC = () => {
               buttonsEnabled={buttonsEnabled}
               onFileUpload={handleFileUpload}
               onShowInstructions={() => setShowInstructions(true)}
-              onShowReport={() => setShowReport(true)}
               onShowKnowledge={() => setShowKnowledge(true)}
             />
             
             {/* Main Content Area */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Left Side - Image Display */}
+              {/* Left Side - Image Display and Patient Navigation */}
               <div className="space-y-4">
                 <ImageUploadArea 
                   selectedImage={selectedImage}
@@ -112,35 +111,28 @@ const OralDiagnosisInterface: React.FC = () => {
                   onExpandedResults={setExpandedResults}
                   onFileUpload={handleFileUpload} // Add this prop
                 />
-                
-                {/* Detection Results */}
-                {detectionComplete && (
-                  <DiagnosisResults 
-                    expandedResults={expandedResults}
-                    onToggleExpanded={() => setExpandedResults(!expandedResults)}
-                  />
-                )}
               </div>
               
-              {/* Right Side - Patient Info and Results */}
+              {/* Right Side - Patient Info and Diagnosis Results */}
               <div className="space-y-6">
-                {/* Patient Info Panel */}
-                <PatientInfoPanel 
-                  currentPatient={currentPatient}
+                <DiagnosisResults 
                   patientData={currentPatientData}
-                  totalPatients={2} // Assuming 2 patients total
                   detectionComplete={detectionComplete}
-                  onPrevPatient={handlePrevPatient}
-                  onNextPatient={handleNextPatient}
                 />
               </div>
             </div>
             
             {/* Bottom Controls */}
             <BottomControls 
+              buttonsEnabled={buttonsEnabled}
+              onShowReport={() => setShowReport(true)}
               selectedImage={selectedImage}
               isDetecting={isDetecting}
-              onStartDetection={handleStartDetection}
+              onStartDetection={handleDetectionStart}
+              currentPatient={currentPatient}
+              totalPatients={2}
+              onPrevPatient={handlePrevPatient}
+              onNextPatient={handleNextPatient}
             />
           </GlassCard>
         </div>

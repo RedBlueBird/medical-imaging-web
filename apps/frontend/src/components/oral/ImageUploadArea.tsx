@@ -112,34 +112,6 @@ const ImageUploadArea: React.FC<ImageUploadAreaProps> = ({
         onChange={onFileUpload}
         className="hidden"
       />
-      
-      {/* Detection Results */}
-      {detectionComplete && (
-        <GlassCard className="p-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className={`text-lg font-semibold ${colors.textPrimary}`}>
-              辅助检查结果
-            </h3>
-            <button
-              onClick={() => onExpandedResults(!expandedResults)}
-              className={`px-4 py-2 rounded-lg ${colors.buttonGhost} transition-colors`}
-            >
-              {expandedResults ? '收起' : '展开'}
-            </button>
-          </div>
-          
-          {expandedResults && (
-            <div className="space-y-2">
-              {Object.entries(mockResults).map(([key, value]) => (
-                <div key={key} className="flex justify-between items-center">
-                  <span className={colors.textSecondary}>{key}:</span>
-                  <span className={colors.textPrimary}>{value.toFixed(3)}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </GlassCard>
-      )}
     </div>
   );
 };

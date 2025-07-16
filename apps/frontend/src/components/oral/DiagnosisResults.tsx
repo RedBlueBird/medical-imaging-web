@@ -27,9 +27,6 @@ const DiagnosisResults: React.FC<DiagnosisResultsProps> = ({
 }) => {
   const colors = useColors();
   
-  // Safety check for patientData - use default values if none provided
-  const safePatientData = patientData;
-  
   return (
     <div className="space-y-6">
       {/* Combined Patient Info and Detection Results Card */}
@@ -40,19 +37,19 @@ const DiagnosisResults: React.FC<DiagnosisResultsProps> = ({
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
           <div className="flex justify-between">
             <span className={`${colors.textSecondary} text-sm`}>患者:</span>
-            <span className={`${colors.textPrimary} text-sm`}>{safePatientData.name}</span>
+            <span className={`${colors.textPrimary} text-sm`}>{patientData.name}</span>
           </div>
           <div className="flex justify-between">
             <span className={`${colors.textSecondary} text-sm`}>主病案号:</span>
-            <span className={`${colors.textPrimary} text-sm`}>{safePatientData.id}</span>
+            <span className={`${colors.textPrimary} text-sm`}>{patientData.id}</span>
           </div>
           <div className="flex justify-between">
             <span className={`${colors.textSecondary} text-sm`}>历史诊断:</span>
-            <span className={`${colors.textPrimary} text-sm`}>{safePatientData.history}</span>
+            <span className={`${colors.textPrimary} text-sm`}>{patientData.history}</span>
           </div>
           <div className="flex justify-between">
             <span className={`${colors.textSecondary} text-sm`}>时间:</span>
-            <span className={`${colors.textPrimary} text-sm`}>{safePatientData.date}</span>
+            <span className={`${colors.textPrimary} text-sm`}>{patientData.date}</span>
           </div>
         </div>
         

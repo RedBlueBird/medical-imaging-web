@@ -88,13 +88,7 @@ const ReportModal: React.FC<ReportModalProps> = ({
   const colors = useColors();
   
   // Safety check for patientData
-  const safePatientData = patientData || {
-    name: '未选择患者',
-    id: 'N/A',
-    history: '无',
-    date: 'N/A',
-    result: '未检测'
-  };
+  const safePatientData = patientData
   
   if (!isOpen) return null;
   

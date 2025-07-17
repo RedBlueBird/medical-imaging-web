@@ -2,23 +2,14 @@
 import React, { useRef, useState } from 'react';
 import { Upload } from 'lucide-react';
 import { useColors } from '@/config/colors';
-import GlassCard from '@/components/ui/GlassCard';
 
 interface ImageUploadAreaProps {
   selectedImage: string | null;
-  mockResults: { [key: string]: number };
-  detectionComplete: boolean;
-  expandedResults: boolean;
-  onExpandedResults: (expanded: boolean) => void;
   onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ImageUploadArea: React.FC<ImageUploadAreaProps> = ({
   selectedImage,
-  mockResults,
-  detectionComplete,
-  expandedResults,
-  onExpandedResults,
   onFileUpload
 }) => {
   const colors = useColors();

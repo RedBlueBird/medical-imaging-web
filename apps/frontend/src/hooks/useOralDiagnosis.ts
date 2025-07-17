@@ -17,7 +17,6 @@ interface UseOralDiagnosisReturn {
   showKnowledge: boolean;
   showReport: boolean;
   reportConfirmed: boolean;
-  expandedResults: boolean;
   error: string | null;
   
   // Actions
@@ -33,7 +32,6 @@ interface UseOralDiagnosisReturn {
   setShowKnowledge: (show: boolean) => void;
   setShowReport: (show: boolean) => void;
   setReportConfirmed: (confirmed: boolean) => void;
-  setExpandedResults: (expanded: boolean) => void;
   setError: (error: string | null) => void;
   
   // Handlers
@@ -61,7 +59,6 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
   const [showKnowledge, setShowKnowledge] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [reportConfirmed, setReportConfirmed] = useState(false);
-  const [expandedResults, setExpandedResults] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   // Handlers
@@ -72,7 +69,6 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
     setDetectionResults(null);
     setDiagnosisResponse(null);
     setError(null);
-    setExpandedResults(false);
   }, []);
   
   const handleDetectionStart = useCallback(async () => {
@@ -134,7 +130,6 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
     setDetectionResults(null);
     setDiagnosisResponse(null);
     setError(null);
-    setExpandedResults(false);
     setShowError(false);
     setShowInstructions(false);
     setShowKnowledge(false);
@@ -161,7 +156,6 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
     showKnowledge,
     showReport,
     reportConfirmed,
-    expandedResults,
     error,
     
     // Actions
@@ -177,7 +171,6 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
     setShowKnowledge,
     setShowReport,
     setReportConfirmed,
-    setExpandedResults,
     setError,
     
     // Handlers

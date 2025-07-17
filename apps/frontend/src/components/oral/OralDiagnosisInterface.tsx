@@ -37,7 +37,6 @@ const OralDiagnosisInterface: React.FC = () => {
     detectionResults,
     diagnosisResponse,
     currentPatient,
-    expandedResults,
     showInstructions,
     showError,
     showKnowledge,
@@ -55,7 +54,6 @@ const OralDiagnosisInterface: React.FC = () => {
     setShowInstructions,
     setShowKnowledge,
     setShowReport,
-    setExpandedResults,
     setReportConfirmed
   } = useOralDiagnosis();
   
@@ -93,10 +91,8 @@ const OralDiagnosisInterface: React.FC = () => {
           <GlassCard className="p-8">
             {/* Top Control Buttons */}
             <ControlButtons 
-              buttonsEnabled={buttonsEnabled}
               onFileUpload={handleFileUpload}
               onShowInstructions={() => setShowInstructions(true)}
-              onShowKnowledge={() => setShowKnowledge(true)}
             />
             
             {/* Main Content Area */}
@@ -105,10 +101,6 @@ const OralDiagnosisInterface: React.FC = () => {
               <div className="space-y-4">
                 <ImageUploadArea 
                   selectedImage={selectedImage}
-                  mockResults={{ OLP: 0.184, OLK: 0.651, OOML: 0.121 }} // Mock data
-                  detectionComplete={detectionComplete}
-                  expandedResults={expandedResults}
-                  onExpandedResults={setExpandedResults}
                   onFileUpload={handleFileUpload} // Add this prop
                 />
               </div>
@@ -116,8 +108,10 @@ const OralDiagnosisInterface: React.FC = () => {
               {/* Right Side - Patient Info and Diagnosis Results */}
               <div className="space-y-6">
                 <DiagnosisResults 
+                  results={detectionResults ?? undefined}
+                  finding={diagnosisResponse?.data.results.finding}
+                  recommendation={diagnosisResponse?.data.results.recommendation}
                   patientData={currentPatientData}
-                  detectionComplete={detectionComplete}
                 />
               </div>
             </div>
@@ -126,6 +120,7 @@ const OralDiagnosisInterface: React.FC = () => {
             <BottomControls 
               buttonsEnabled={buttonsEnabled}
               onShowReport={() => setShowReport(true)}
+              onShowKnowledge={() => setShowKnowledge(true)}
               selectedImage={selectedImage}
               isDetecting={isDetecting}
               onStartDetection={handleDetectionStart}

@@ -1,6 +1,6 @@
 // src/components/oral/BottomControls.tsx
 import React from 'react';
-import { ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, BookOpen } from 'lucide-react';
 import { useColors } from '@/config/colors';
 
 interface BottomControlsProps {
@@ -13,6 +13,7 @@ interface BottomControlsProps {
   onNextPatient: () => void;
   buttonsEnabled: boolean;
   onShowReport: () => void;
+  onShowKnowledge: () => void;
 }
 
 const BottomControls: React.FC<BottomControlsProps> = ({
@@ -24,7 +25,8 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   onPrevPatient,
   onNextPatient,
   buttonsEnabled,
-  onShowReport
+  onShowReport,
+  onShowKnowledge
 }) => {
   const colors = useColors();
   
@@ -53,8 +55,17 @@ const BottomControls: React.FC<BottomControlsProps> = ({
         </button>
       </div>
       
-      {/* Right side - Report and Detection buttons */}
+      {/* Right side - Knowledge, Report and Detection buttons */}
       <div className="flex items-center gap-4">
+        <button
+          onClick={onShowKnowledge}
+          disabled={!buttonsEnabled}
+          className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${buttonsEnabled ? colors.buttonPrimary : 'bg-gray-500/50 cursor-not-allowed'} ${colors.textLight} border ${colors.borderAccent} ${colors.shadow} flex items-center gap-2`}
+        >
+          <BookOpen className="w-5 h-5" />
+          医学知识宣讲
+        </button>
+        
         <button
           onClick={onShowReport}
           disabled={!buttonsEnabled}

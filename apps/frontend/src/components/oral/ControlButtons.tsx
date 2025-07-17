@@ -1,21 +1,17 @@
 // src/components/oral/ControlButtons.tsx
 import React from 'react';
 import Link from 'next/link';
-import { Upload, BookOpen, Eye, ArrowLeft } from 'lucide-react';
+import { Upload, Eye, ArrowLeft } from 'lucide-react';
 import { useColors } from '@/config/colors';
 
 interface ControlButtonsProps {
-  buttonsEnabled: boolean;
   onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onShowInstructions: () => void;
-  onShowKnowledge: () => void;
 }
 
 const ControlButtons: React.FC<ControlButtonsProps> = ({
-  buttonsEnabled,
   onFileUpload,
-  onShowInstructions,
-  onShowKnowledge
+  onShowInstructions
 }) => {
   const colors = useColors();
   
@@ -40,15 +36,6 @@ const ControlButtons: React.FC<ControlButtonsProps> = ({
         >
           <Eye className="w-5 h-5" />
           图像导入说明
-        </button>
-        
-        <button
-          onClick={onShowKnowledge}
-          disabled={!buttonsEnabled}
-          className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${buttonsEnabled ? colors.buttonPrimary : 'bg-gray-500/50 cursor-not-allowed'} ${colors.textLight} border ${colors.borderAccent} ${colors.shadow} flex items-center gap-2`}
-        >
-          <BookOpen className="w-5 h-5" />
-          医学知识宣讲
         </button>
       </div>
 

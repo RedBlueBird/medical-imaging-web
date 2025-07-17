@@ -1,80 +1,19 @@
 import React from 'react';
 import { Download, Printer, X } from 'lucide-react';
+import {Patient} from '@/types/patient';
+import { useColors } from '@/config/colors';
+import GlassCard from '@/components/ui/GlassCard';
 
 // Types
-interface PatientData {
-  name: string;
-  id: string;
-  history: string;
-  date: string;
-  result: string;
-}
-
 interface ReportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  patientData: PatientData;
+  patientData: Patient;
   reportConfirmed: boolean;
   onReportConfirmedChange: (confirmed: boolean) => void;
   onDownloadReport: () => void;
   onPrintReport: () => void;
 }
-
-// Colors hook (you'll need to import this from your config)
-const useColors = () => ({
-  bgPrimary: 'bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900',
-  textPrimary: 'text-white',
-  textSecondary: 'text-gray-300',
-  textLight: 'text-white',
-  buttonPrimary: 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700',
-  buttonGhost: 'bg-white/10 hover:bg-white/20',
-  glassOverlay: 'bg-white/10',
-  glassHover: 'hover:bg-white/20',
-  glassBorder: 'border-white/20',
-  borderAccent: 'border-blue-500/50',
-  shadow: 'shadow-2xl'
-});
-
-// GlassCard component (you'll need to import this from your UI components)
-const GlassCard: React.FC<{ 
-  children: React.ReactNode; 
-  className?: string; 
-  hover?: boolean; 
-  padding?: 'none' | 'sm' | 'md' | 'lg'; 
-  rounded?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'; 
-}> = ({ children, className = '', hover = true, padding = 'md', rounded = '2xl' }) => {
-  const colors = useColors();
-  
-  const paddingClasses = {
-    none: '',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8'
-  };
-  
-  const roundedClasses = {
-    sm: 'rounded-sm',
-    md: 'rounded-md',
-    lg: 'rounded-lg',
-    xl: 'rounded-xl',
-    '2xl': 'rounded-2xl'
-  };
-  
-  return (
-    <div className={`
-      ${colors.glassOverlay} 
-      ${hover ? colors.glassHover : ''} 
-      ${roundedClasses[rounded]}
-      ${paddingClasses[padding]}
-      border ${colors.glassBorder}
-      backdrop-blur-md 
-      transition-all duration-300
-      ${className}
-    `}>
-      {children}
-    </div>
-  );
-};
 
 const ReportModal: React.FC<ReportModalProps> = ({
   isOpen,

@@ -43,7 +43,7 @@ app.use('*', (req, res) => {
 // Start server
 const startServer = async () => {
   try {
-    // await connectDatabase();
+    await connectDatabase();
     
     app.listen(PORT, () => {
       logger.info(`Server running on port ${PORT}`);

@@ -3,27 +3,21 @@
 import React from 'react';
 import { useColors } from '@/config/colors';
 import GlassCard from '@/components/ui/GlassCard';
-
-interface PatientData {
-  name: string;
-  id: string;
-  history: string;
-  date: string;
-  result: string;
-}
+import { DetectionResults } from '@/types/oral';
+import { Patient } from '@/types/patient';
 
 interface DiagnosisResultsProps {
-  results?: Record<string, number>;
-  patientResult?: string;
-  patientData: PatientData;
-  detectionComplete: boolean;
+  results?: DetectionResults;
+  finding?: string;
+  recommendation?: string;
+  patientData: Patient;
 }
 
 const DiagnosisResults: React.FC<DiagnosisResultsProps> = ({ 
-  results = { OLP: 0.000, OLK: 0.000, OOML: 0.000 }, // Default mock results
-  patientResult = '口腔白斑病 待排',
-  patientData,
-  detectionComplete
+  results = { OLP: 0.000, OLK: 0.000, OOML: 0.000 },
+  finding = '无诊断结果',
+  recommendation = 'N/A',
+  patientData
 }) => {
   const colors = useColors();
   
@@ -94,13 +88,13 @@ const DiagnosisResults: React.FC<DiagnosisResultsProps> = ({
         <GlassCard className="p-6">
           <div className="flex justify-between items-center mb-4">
             <span className={`text-md font-semibold ${colors.textPrimary}`}>辅助诊断结果:</span>
-            <span className={`${colors.textSecondary}`}>{patientResult}</span>
+            <span className={`${colors.textSecondary}`}>{finding}</span>
           </div>
           <div className="space-y-4">
             <div>
               <h4 className={`font-medium ${colors.textPrimary} mb-2`}>诊断建议</h4>
               <p className={`${colors.textSecondary} text-sm leading-relaxed`}>
-                口腔白斑病不是癌症，但是有一定的癌变风险，建议前往专业口腔黏膜科室接受进一步诊断，提高警惕，严密观察，并必要时可进行多次组织活检。
+                {recommendation}
               </p>
             </div>
           </div>

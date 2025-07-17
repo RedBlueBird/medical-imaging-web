@@ -9,7 +9,7 @@ const diagnosisSchema = new Schema<DiagnosisResult>({
   results: {
     // Common fields
     confidence: { type: Number, required: true, min: 0, max: 1 },
-    findings: [{ type: String, required: true }],
+    finding: { type: String, required: true },
     recommendation: { type: String, required: true },
     severity: { type: String, enum: ['low', 'medium', 'high'] },
     

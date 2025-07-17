@@ -19,7 +19,7 @@ export interface OralDiagnosisResponse {
       OLK: number;
       OOML: number;
       confidence: number;
-      findings: string[];
+      finding: string;
       recommendation: string;
       severity: 'low' | 'medium' | 'high';
     };
@@ -102,6 +102,8 @@ class OralDiagnosisService {
       }
 
       const result = await response.json();
+      console.log('Analysis result:', result); // Debug log
+
       return result;
     } catch (error) {
       console.error('Oral diagnosis error:', error);

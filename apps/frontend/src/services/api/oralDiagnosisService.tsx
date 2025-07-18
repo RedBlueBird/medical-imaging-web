@@ -1,40 +1,6 @@
-import { Upload } from "lucide-react";
+import { UploadImageResponse, OralDiagnosisRequest, OralDiagnosisResponse } from '@/types/oral';
 
 // src/services/api/oralDiagnosisService.ts
-export interface OralDiagnosisRequest {
-  patientId: string;
-  imageUrl: string;
-  filename?: string;
-}
-
-export interface OralDiagnosisResponse {
-  success: boolean;
-  data: {
-    id: string;
-    patientId: string;
-    type: 'oral';
-    imageUrl: string;
-    results: {
-      OLP: number;
-      OLK: number;
-      OOML: number;
-      confidence: number;
-      finding: string;
-      recommendation: string;
-      severity: 'low' | 'medium' | 'high';
-    };
-    createdAt: string;
-    updatedAt: string;
-  };
-  message: string;
-}
-
-export interface UploadImageResponse {
-  success: boolean;
-  imageUrl: string;
-  filename: string;
-}
-
 class OralDiagnosisService {
   private readonly baseUrl: string;
 

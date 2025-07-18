@@ -9,6 +9,8 @@ export interface DiagnosisResponse {
   OLP?: number;
   OLK?: number;
   OOML?: number;
+  // New knowledge field for markdown content
+  knowledge?: string;
 }
 
 export interface DiagnosisResult {
@@ -28,42 +30,6 @@ export interface CreateDiagnosisRequest {
   imageFile?: File;
   imageUrl?: string;
   filename?: string;
-}
-
-export interface Patient {
-  _id?: string;
-  name: string;
-  age: number;
-  gender: 'male' | 'female' | 'other';
-  contactInfo?: {
-    phone?: string;
-    email?: string;
-  };
-  medicalHistory?: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface CreatePatientRequest {
-  name: string;
-  age: number;
-  gender: 'male' | 'female' | 'other';
-  contactInfo?: {
-    phone?: string;
-    email?: string;
-  };
-  medicalHistory?: string[];
-}
-
-export interface UpdatePatientRequest extends Partial<CreatePatientRequest> {
-  _id: string;
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: string;
 }
 
 // Frontend-specific types

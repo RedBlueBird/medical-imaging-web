@@ -4,7 +4,7 @@ import React from 'react';
 import { useColors } from '@/config/colors';
 import GlassCard from '@/components/ui/GlassCard';
 import { DetectionResults } from '@/types/oral';
-import { Patient } from '@/types/patient';
+import { Patient } from '@shared/types';
 
 interface DiagnosisResultsProps {
   results?: DetectionResults;
@@ -35,7 +35,7 @@ const DiagnosisResults: React.FC<DiagnosisResultsProps> = ({
           </div>
           <div className="flex justify-between">
             <span className={`${colors.textSecondary} text-sm`}>主病案号:</span>
-            <span className={`${colors.textPrimary} text-sm`}>{patientData.id}</span>
+            <span className={`${colors.textPrimary} text-sm`}>{patientData.index}</span>
           </div>
           <div className="flex justify-between">
             <span className={`${colors.textSecondary} text-sm`}>历史诊断:</span>

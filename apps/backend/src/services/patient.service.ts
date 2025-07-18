@@ -10,7 +10,7 @@ export class PatientService {
   }
 
   async getPatientById(id: string): Promise<Patient> {
-    const patient = await PatientModel.findById(id);
+    const patient = await PatientModel.findOne({ id });
     if (!patient) {
       throw createError('Patient not found', 404);
     }

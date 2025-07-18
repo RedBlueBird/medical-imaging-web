@@ -16,7 +16,10 @@ const diagnosisSchema = new Schema<DiagnosisResult>({
     // Oral-specific fields
     OLP: { type: Number, min: 0, max: 1 },
     OLK: { type: Number, min: 0, max: 1 },
-    OOML: { type: Number, min: 0, max: 1 }
+    OOML: { type: Number, min: 0, max: 1 },
+    
+    // New knowledge field for markdown content
+    knowledge: { type: String }
   }
 }, {
   timestamps: true

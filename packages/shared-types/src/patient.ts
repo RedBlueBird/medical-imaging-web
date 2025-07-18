@@ -1,12 +1,12 @@
 // packages/shared-types/src/patient.ts
 export interface Patient {
-  id?: string; // Optional for creation, required after saving
   name: string;
-  age: number;
-  gender: 'male' | 'female' | 'other';
-  email?: string;
-  phone?: string;
-  medicalHistory?: string[];
+  id: string;
+  history: string;
+  date: string;
+  index: string;
+  biopsyConfirmed?: boolean;
+  doctor?: string;
   createdAt?: Date; // Added by timestamps: true
   updatedAt?: Date; // Added by timestamps: true
 }

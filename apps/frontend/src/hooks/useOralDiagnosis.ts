@@ -1,40 +1,45 @@
 // hooks/useOralDiagnosis.ts
 import { useState, useCallback } from 'react';
 import { DetectionResults } from '@/types/oral';
-import { OralDiagnosisResponse, oralDiagnosisService } from '@/services/api/oralDiagnosisService';
+import { oralDiagnosisService } from '@/services/api/oralDiagnosisService';
+import { OralDiagnosisResponse } from '@/types/oral';
+import { usePatientManagement } from '@/hooks/usePatientManagement';
 
 interface UseOralDiagnosisReturn {
-  // State
+  // Diagnosis state
   selectedImage: string | null;
   selectedFile: File | null;
   isDetecting: boolean;
   detectionComplete: boolean;
   detectionResults: DetectionResults | null;
   diagnosisResponse: OralDiagnosisResponse | null;
-  currentPatient: number;
+  
+  // Modal state
   showInstructions: boolean;
   showError: boolean;
   showKnowledge: boolean;
   showReport: boolean;
-  reportConfirmed: boolean;
   error: string | null;
   
-  // Actions
+  // Patient management (from usePatientManagement)
+  patientManagement: ReturnType<typeof usePatientManagement>;
+  
+  // Diagnosis actions
   setSelectedImage: (image: string | null) => void;
   setSelectedFile: (file: File | null) => void;
   setIsDetecting: (detecting: boolean) => void;
   setDetectionComplete: (complete: boolean) => void;
   setDetectionResults: (results: DetectionResults | null) => void;
   setDiagnosisResponse: (response: OralDiagnosisResponse | null) => void;
-  setCurrentPatient: (patient: number) => void;
+  
+  // Modal actions
   setShowInstructions: (show: boolean) => void;
   setShowError: (show: boolean) => void;
   setShowKnowledge: (show: boolean) => void;
   setShowReport: (show: boolean) => void;
-  setReportConfirmed: (confirmed: boolean) => void;
   setError: (error: string | null) => void;
   
-  // Handlers
+  // Diagnosis handlers
   handleImageSelect: (image: string | null, file: File | null) => void;
   handleDetectionStart: () => Promise<void>;
   handleDetectionComplete: (results: DetectionResults, response: OralDiagnosisResponse) => void;
@@ -43,23 +48,26 @@ interface UseOralDiagnosisReturn {
   // Computed values
   buttonsEnabled: boolean;
   canStartDetection: boolean;
-  currentPatientId: string;
 }
 
 export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
+  // Diagnosis state
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDetecting, setIsDetecting] = useState(false);
   const [detectionComplete, setDetectionComplete] = useState(false);
   const [detectionResults, setDetectionResults] = useState<DetectionResults | null>(null);
   const [diagnosisResponse, setDiagnosisResponse] = useState<OralDiagnosisResponse | null>(null);
-  const [currentPatient, setCurrentPatient] = useState(0);
+  
+  // Modal state
   const [showInstructions, setShowInstructions] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showKnowledge, setShowKnowledge] = useState(false);
   const [showReport, setShowReport] = useState(false);
-  const [reportConfirmed, setReportConfirmed] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Patient management hook
+  const patientManagement = usePatientManagement();
   
   // Handlers
   const handleImageSelect = useCallback((image: string | null, file: File | null) => {
@@ -85,22 +93,26 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
       setDiagnosisResponse(null);
       setError(null);
 
-      // Generate patient ID based on current patient
-      const patientId = `patient-${currentPatient + 1}`;
-      
-      // Call the API service
-      const response = await oralDiagnosisService.analyzeOralImage(patientId, selectedFile);
+      // Use the current patient ID from patient management
+      // const patientId = patientManagement.currentPatientId === 'N/A' ? 'patient-0' : patientManagement.currentPatientId;
+      const patientId = "patient-0"; // Default to patient-0 for now
+
+      // Call diagnosis API
+      const diagnosisResponse = await oralDiagnosisService.analyzeOralImage(patientId, selectedFile);
+
+      // Add the patient to the patients array (or switch to it if it already exists)
+      await patientManagement.addPatientById(patientId);
 
       // Convert API response to DetectionResults format
       const detectionResults: DetectionResults = {
-        OLP: response.data.results.OLP,
-        OLK: response.data.results.OLK,
-        OOML: response.data.results.OOML
+        OLP: diagnosisResponse.data.results.OLP,
+        OLK: diagnosisResponse.data.results.OLK,
+        OOML: diagnosisResponse.data.results.OOML
       };
       
       // Update state with results
       setDetectionResults(detectionResults);
-      setDiagnosisResponse(response);
+      setDiagnosisResponse(diagnosisResponse);
       setDetectionComplete(true);
       setIsDetecting(false);
       
@@ -112,7 +124,7 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
       setDetectionComplete(false);
       setShowError(true);
     }
-  }, [selectedFile, currentPatient]);
+  }, [selectedFile, patientManagement]);
   
   const handleDetectionComplete = useCallback((results: DetectionResults, response: OralDiagnosisResponse) => {
     setIsDetecting(false);
@@ -134,46 +146,47 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
     setShowInstructions(false);
     setShowKnowledge(false);
     setShowReport(false);
-    setReportConfirmed(false);
   }, []);
   
   // Computed values
   const buttonsEnabled = Boolean(selectedImage && detectionComplete && !isDetecting);
   const canStartDetection = Boolean(selectedImage && selectedFile && !isDetecting && !detectionComplete);
-  const currentPatientId = `patient-${currentPatient + 1}`; // Generate patient ID based on current patient index
   
   return {
-    // State
+    // Diagnosis state
     selectedImage,
     selectedFile,
     isDetecting,
     detectionComplete,
     detectionResults,
     diagnosisResponse,
-    currentPatient,
+    
+    // Modal state
     showInstructions,
     showError,
     showKnowledge,
     showReport,
-    reportConfirmed,
     error,
     
-    // Actions
+    // Patient management
+    patientManagement,
+    
+    // Diagnosis actions
     setSelectedImage,
     setSelectedFile,
     setIsDetecting,
     setDetectionComplete,
     setDetectionResults,
     setDiagnosisResponse,
-    setCurrentPatient,
+    
+    // Modal actions
     setShowInstructions,
     setShowError,
     setShowKnowledge,
     setShowReport,
-    setReportConfirmed,
     setError,
     
-    // Handlers
+    // Diagnosis handlers
     handleImageSelect,
     handleDetectionStart,
     handleDetectionComplete,
@@ -181,7 +194,6 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
     
     // Computed values
     buttonsEnabled,
-    canStartDetection,
-    currentPatientId
+    canStartDetection
   };
 };

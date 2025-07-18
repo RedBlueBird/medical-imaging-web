@@ -1,7 +1,9 @@
 import React from 'react';
 import { Download, Printer, X } from 'lucide-react';
-import {Patient} from '@/types/patient';
+import { Patient } from '@shared/types';
 import { useColors } from '@/config/colors';
+import { useHandleReport } from '@/hooks/useHandleReport';
+import { OralDiagnosisResponse } from '@/types/oral';
 import GlassCard from '@/components/ui/GlassCard';
 
 // Types
@@ -9,27 +11,41 @@ interface ReportModalProps {
   isOpen: boolean;
   onClose: () => void;
   patientData: Patient;
-  reportConfirmed: boolean;
-  onReportConfirmedChange: (confirmed: boolean) => void;
-  onDownloadReport: () => void;
-  onPrintReport: () => void;
+  finding?: string;
+  recommendation?: string;
+  diagnosisResponse?: OralDiagnosisResponse | null;
+  onDownloadReport?: () => void; // Keep for backward compatibility
+  onPrintReport?: () => void; // Keep for backward compatibility
 }
 
 const ReportModal: React.FC<ReportModalProps> = ({
   isOpen,
   onClose,
   patientData,
-  reportConfirmed,
-  onReportConfirmedChange,
-  onDownloadReport,
-  onPrintReport
+  finding = '无诊断结果',
+  recommendation = 'N/A',
+  diagnosisResponse = null,
+  onDownloadReport: legacyDownloadReport,
+  onPrintReport: legacyPrintReport
 }) => {
   const colors = useColors();
   
+  // Use the custom hook for report handling
+  const { handleDownloadReport, handlePrintReport } = useHandleReport({
+    patientData,
+    diagnosisResponse,
+    finding,
+    recommendation
+  });
+  
   // Safety check for patientData
-  const safePatientData = patientData
+  const safePatientData = patientData;
   
   if (!isOpen) return null;
+  
+  // Use the hook handlers or fallback to legacy handlers
+  const onDownload = handleDownloadReport || legacyDownloadReport || (() => {});
+  const onPrint = handlePrintReport || legacyPrintReport || (() => {});
   
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -62,7 +78,7 @@ const ReportModal: React.FC<ReportModalProps> = ({
                   </div>
                   <div className="flex justify-between">
                     <span className={colors.textSecondary}>主病案号:</span>
-                    <span className={colors.textPrimary}>{safePatientData.id}</span>
+                    <span className={colors.textPrimary}>{safePatientData.index}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -72,75 +88,84 @@ const ReportModal: React.FC<ReportModalProps> = ({
                   </div>
                   <div className="flex justify-between">
                     <span className={colors.textSecondary}>活检确认:</span>
-                    <span className={colors.textPrimary}>未活检</span>
+                    <span className={colors.textPrimary}>{safePatientData.biopsyConfirmed ? '已活检' : '未活检'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className={colors.textSecondary}>诊断医师:</span>
-                    <span className={colors.textPrimary}>张三</span>
+                    <span className={colors.textPrimary}>{safePatientData.doctor}</span>
                   </div>
                 </div>
               </div>
+              
+              {/* Detection Results Section - Only show if diagnosis response exists */}
+              {diagnosisResponse?.data?.results && (
+                <div className="border-t border-white/20 pt-4">
+                  <h4 className={`font-medium ${colors.textPrimary} mb-4`}>
+                    检测结果概览
+                  </h4>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="text-center p-4 bg-white/5 rounded-lg">
+                      <div className={`text-2xl font-bold ${colors.textPrimary} mb-1`}>
+                        {(diagnosisResponse.data.results.OLP * 100).toFixed(1)}%
+                      </div>
+                      <div className={`text-sm ${colors.textSecondary}`}>
+                        口腔扁平苔藓 (OLP)
+                      </div>
+                    </div>
+                    <div className="text-center p-4 bg-white/5 rounded-lg">
+                      <div className={`text-2xl font-bold ${colors.textPrimary} mb-1`}>
+                        {(diagnosisResponse.data.results.OLK * 100).toFixed(1)}%
+                      </div>
+                      <div className={`text-sm ${colors.textSecondary}`}>
+                        口腔白斑 (OLK)
+                      </div>
+                    </div>
+                    <div className="text-center p-4 bg-white/5 rounded-lg">
+                      <div className={`text-2xl font-bold ${colors.textPrimary} mb-1`}>
+                        {(diagnosisResponse.data.results.OOML * 100).toFixed(1)}%
+                      </div>
+                      <div className={`text-sm ${colors.textSecondary}`}>
+                        口腔恶性病变 (OOML)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
               
               {/* Diagnosis Results Section */}
               <div className="border-t border-white/20 pt-4">
                 <h4 className={`font-medium ${colors.textPrimary} mb-2`}>
                   辅助诊断结果
                 </h4>
-                <p className={`${colors.textPrimary} mb-4`}>
-                  {safePatientData.result}
-                </p>
+                <div className={`p-4 bg-white/5 rounded-lg ${colors.textSecondary}`}>
+                  {finding}
+                </div>
                 
-                <h4 className={`font-medium ${colors.textPrimary} mb-2`}>
-                  辅助诊断结论
+                <h4 className={`font-medium ${colors.textPrimary} mb-2 mt-4`}>
+                  诊断建议
                 </h4>
-                <p className={`${colors.textSecondary} text-sm leading-relaxed`}>
-                  经AI辅助系统诊断，该患者可能患有口腔白斑病。口腔白斑病不是癌症，但是有一定的癌变风险，建议前往专业口腔黏膜科室接受进一步诊断，提高警惕，严密观察，并必要时可进行多次组织活检。
-                </p>
-                <p className={`${colors.textSecondary} text-sm leading-relaxed mt-4`}>
-                  口腔白斑病治疗第一步是去除任何可能的刺激因素，去除残根、残冠及不良修复体，纠正不良生活习惯。例如戒烟戒酒，不吃刺激食品和过烫、粗糙食物等，然后根据不同的病情决定用药还是采用其他治疗方案。定期随访是非常重要的，如果观察到白斑增厚、变硬、出现溃疡等的时候，应及时手术切除。
-                </p>
+                <div className={`p-4 bg-white/5 rounded-lg ${colors.textSecondary} text-sm leading-relaxed`}>
+                  {recommendation}
+                </div>
               </div>
               
               {/* Confirmation and Action Buttons */}
-              <div className="flex items-center justify-between border-t border-white/20 pt-4">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="confirm"
-                    checked={reportConfirmed}
-                    onChange={(e) => onReportConfirmedChange(e.target.checked)}
-                    className="w-4 h-4 rounded border-white/30 bg-white/10 text-blue-500 focus:ring-blue-500"
-                  />
-                  <label htmlFor="confirm" className={`text-sm ${colors.textSecondary}`}>
-                    确认医嘱
-                  </label>
-                </div>
-                
+              <div className="flex justify-end border-t border-white/20 pt-4">                
                 <div className="flex gap-3">
                   <button
-                    onClick={onDownloadReport}
-                    disabled={!reportConfirmed}
-                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                      reportConfirmed 
-                        ? colors.buttonPrimary 
-                        : 'bg-gray-500/50 cursor-not-allowed'
-                    } ${colors.textLight} flex items-center gap-2`}
+                    onClick={onDownload}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${colors.buttonPrimary} ${colors.textLight} flex items-center gap-2 hover:scale-105`}
                   >
                     <Download className="w-4 h-4" />
-                    下载
+                    下载报告
                   </button>
                   
                   <button
-                    onClick={onPrintReport}
-                    disabled={!reportConfirmed}
-                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                      reportConfirmed 
-                        ? colors.buttonPrimary 
-                        : 'bg-gray-500/50 cursor-not-allowed'
-                    } ${colors.textLight} flex items-center gap-2`}
+                    onClick={onPrint}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${colors.buttonPrimary} ${colors.textLight} flex items-center gap-2 hover:scale-105`}
                   >
                     <Printer className="w-4 h-4" />
-                    打印
+                    打印报告
                   </button>
                 </div>
               </div>

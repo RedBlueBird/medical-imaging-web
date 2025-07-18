@@ -48,8 +48,8 @@ const BottomControls: React.FC<BottomControlsProps> = ({
         
         <button
           onClick={onNextPatient}
-          disabled={currentPatient === totalPatients - 1}
-          className={`p-3 rounded-lg ${currentPatient === totalPatients - 1 ? 'bg-gray-500/50 cursor-not-allowed' : colors.buttonGhost} transition-colors`}
+          disabled={(currentPatient === totalPatients - 1) || totalPatients === 0}
+          className={`p-3 rounded-lg ${((currentPatient === totalPatients - 1) || totalPatients === 0) ? 'bg-gray-500/50 cursor-not-allowed' : colors.buttonGhost} transition-colors`}
         >
           <ChevronRight className="w-5 h-5" />
         </button>

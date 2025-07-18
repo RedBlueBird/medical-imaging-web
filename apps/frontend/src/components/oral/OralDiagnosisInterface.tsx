@@ -1,12 +1,11 @@
 // src/components/oral/OralDiagnosisInterface.tsx
 'use client'
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Upload, Download, BookOpen, ArrowLeft, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import { useColors } from '@/config/colors';
 
 // Component imports
 import GlassCard from '@/components/ui/GlassCard';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 // Modal imports
 import InstructionsModal from '@/components/oral/modals/InstructionsModal';
@@ -23,38 +22,44 @@ import BottomControls from '@/components/oral/BottomControls';
 // Hook imports
 import { useOralDiagnosis } from '@/hooks/useOralDiagnosis';
 import { useFileUpload } from '@/hooks/useFileUpload';
-import { usePatientNavigation } from '@/hooks/usePatientNavigation';
 
 const OralDiagnosisInterface: React.FC = () => {
   const colors = useColors();
   
   // State management using custom hooks
   const {
+    // Diagnosis state
     selectedImage,
     selectedFile,
     isDetecting,
     detectionComplete,
     detectionResults,
     diagnosisResponse,
-    currentPatient,
+    
+    // Modal state
     showInstructions,
     showError,
     showKnowledge,
     showReport,
-    reportConfirmed,
     error,
-    buttonsEnabled,
-    canStartDetection,
-    currentPatientId,
-    handleImageSelect,
-    handleDetectionStart,
-    handleDetectionComplete,
-    handleReset,
+    
+    // Patient management
+    patientManagement,
+    
+    // Diagnosis actions
     setShowError,
     setShowInstructions,
     setShowKnowledge,
     setShowReport,
-    setReportConfirmed
+    
+    // Diagnosis handlers
+    handleImageSelect,
+    handleDetectionStart,
+    handleReset,
+    
+    // Computed values
+    buttonsEnabled,
+    canStartDetection
   } = useOralDiagnosis();
   
   const { handleFileUpload } = useFileUpload({
@@ -62,13 +67,7 @@ const OralDiagnosisInterface: React.FC = () => {
     onDetectionReset: handleReset,
     onError: (error: string) => setShowError(true) // Convert string error to boolean
   });
-  
-  const { handlePrevPatient, handleNextPatient, currentPatientData } = usePatientNavigation({
-    currentPatient,
-    patients: [], // You'll need to provide patient data
-    onPatientChange: () => {} // You'll need to implement this
-  });
-  
+
   return (
     <div className={`min-h-screen ${colors.bgPrimary} relative overflow-hidden`}>
       {/* Animated Background */}
@@ -101,7 +100,7 @@ const OralDiagnosisInterface: React.FC = () => {
               <div className="space-y-4">
                 <ImageUploadArea 
                   selectedImage={selectedImage}
-                  onFileUpload={handleFileUpload} // Add this prop
+                  onFileUpload={handleFileUpload}
                 />
               </div>
               
@@ -111,7 +110,7 @@ const OralDiagnosisInterface: React.FC = () => {
                   results={detectionResults ?? undefined}
                   finding={diagnosisResponse?.data.results.finding}
                   recommendation={diagnosisResponse?.data.results.recommendation}
-                  patientData={currentPatientData}
+                  patientData={patientManagement.currentPatientData}
                 />
               </div>
             </div>
@@ -124,10 +123,10 @@ const OralDiagnosisInterface: React.FC = () => {
               selectedImage={selectedImage}
               isDetecting={isDetecting}
               onStartDetection={handleDetectionStart}
-              currentPatient={currentPatient}
-              totalPatients={2}
-              onPrevPatient={handlePrevPatient}
-              onNextPatient={handleNextPatient}
+              currentPatient={patientManagement.currentPatient}
+              totalPatients={patientManagement.totalPatients}
+              onPrevPatient={patientManagement.handlePrevPatient}
+              onNextPatient={patientManagement.handleNextPatient}
             />
           </GlassCard>
         </div>
@@ -147,25 +146,16 @@ const OralDiagnosisInterface: React.FC = () => {
       <KnowledgeModal 
         isOpen={showKnowledge}
         onClose={() => setShowKnowledge(false)}
+        knowledgeContent={diagnosisResponse?.data.results.knowledge}
       />
       
       <ReportModal 
         isOpen={showReport}
         onClose={() => setShowReport(false)}
-        patientData={currentPatientData}
-        reportConfirmed={false} // You'll need to manage this state
-        onReportConfirmedChange={(confirmed) => {
-          // TODO: Implement report confirmation logic
-          console.log('Report confirmed:', confirmed);
-        }}
-        onDownloadReport={() => {
-          // TODO: Implement download logic
-          console.log('Downloading report...');
-        }}
-        onPrintReport={() => {
-          // TODO: Implement print logic
-          console.log('Printing report...');
-        }}
+        patientData={patientManagement.currentPatientData}
+        finding={diagnosisResponse?.data.results.finding}
+        recommendation={diagnosisResponse?.data.results.recommendation}
+        diagnosisResponse={diagnosisResponse}
       />
     </div>
   );

@@ -99,6 +99,7 @@ const OralDiagnosisInterface: React.FC = () => {
               {/* Left Side - Image Display and Patient Navigation */}
               <div className="space-y-4">
                 <ImageUploadArea 
+                  // selectedImage={patientManagement.isCurrentPatientDummy ? selectedImage : (diagnosisResponse?.data.imageUrl || selectedImage)}
                   selectedImage={selectedImage}
                   onFileUpload={handleFileUpload}
                 />

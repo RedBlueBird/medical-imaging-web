@@ -19,6 +19,7 @@ interface UsePatientManagementReturn {
   refreshCurrentPatient: () => Promise<void>;
   loadAllPatients: () => Promise<void>;
   addPatientById: (patientId: string) => Promise<void>;
+  addDummyPatient: () => void;
   
   // Navigation
   handlePrevPatient: () => void;
@@ -29,6 +30,7 @@ interface UsePatientManagementReturn {
   currentPatientIndex: number;
   canNavigatePrev: boolean;
   canNavigateNext: boolean;
+  isCurrentPatientDummy: boolean;
 }
 
 // Default patient data to prevent undefined errors
@@ -90,12 +92,11 @@ export const usePatientManagement = (): UsePatientManagementReturn => {
     // Check if patient already exists
     console.log('Adding patient by ID:', patientId); // Debug log
     console.log('Current patients:', patients); // Debug log
-    const existingPatientIndex = patients.findIndex(p => p.id === patientId);
-    if (existingPatientIndex !== -1) {
-      // Patient already exists, just switch to it
-      handlePatientChange(existingPatientIndex);
-      return;
-    }
+    // const existingPatientIndex = patients.findIndex(p => p.id === patientId);
+    // if (existingPatientIndex !== -1) {
+    //   handlePatientChange(existingPatientIndex);
+    //   return;
+    // }
     
     setIsLoading(true);
     setError(null);
@@ -108,15 +109,26 @@ export const usePatientManagement = (): UsePatientManagementReturn => {
 
         console.log('Adding new patient:', newPatient); // Debug log
         
-        // Add new patient to the array
         setPatients(prevPatients => {
-          const updatedPatients = [...prevPatients, newPatient];
-          return updatedPatients;
+          // Check if the last patient is identical to defaultPatient
+          if (
+            prevPatients.length > 0 &&
+            JSON.stringify(prevPatients[prevPatients.length - 1]) === JSON.stringify(defaultPatient)
+          ) {
+            // Replace the last patient with newPatient
+            const updatedPatients = [...prevPatients];
+            updatedPatients[updatedPatients.length - 1] = newPatient;
+            // Switch to the replaced patient (last index)
+            setCurrentPatient(updatedPatients.length - 1);
+            return updatedPatients;
+          } else {
+            // Add new patient to the array
+            const updatedPatients = [...prevPatients, newPatient];
+            // Switch to the new patient (it will be at the end of the array)
+            setCurrentPatient(updatedPatients.length - 1);
+            return updatedPatients;
+          }
         });
-        
-        // Switch to the new patient (it will be at the end of the array)
-        const newPatientIndex = patients.length;
-        setCurrentPatient(newPatientIndex);
         setCurrentPatientData(newPatient);
       }
     } catch (error) {
@@ -127,6 +139,17 @@ export const usePatientManagement = (): UsePatientManagementReturn => {
       setIsLoading(false);
     }
   }, [patients, handlePatientChange]);
+
+  // Add a dummy patient for testing
+  const addDummyPatient = useCallback(() => {
+    setPatients(prevPatients => [
+      ...prevPatients,
+      defaultPatient
+    ]);
+
+    setCurrentPatient(patients.length);
+    setCurrentPatientData(defaultPatient);
+  }, []);
   
   // Refresh current patient data from API
   const refreshCurrentPatient = useCallback(async () => {
@@ -190,6 +213,7 @@ export const usePatientManagement = (): UsePatientManagementReturn => {
   const canNavigatePrev = currentPatient > 0;
   const canNavigateNext = currentPatient < patients.length - 1;
   const totalPatients = patients.length;
+  const isCurrentPatientDummy = currentPatientData.id === 'N/A';
   
   return {
     // State
@@ -207,6 +231,7 @@ export const usePatientManagement = (): UsePatientManagementReturn => {
     refreshCurrentPatient,
     loadAllPatients,
     addPatientById,
+    addDummyPatient,
     
     // Navigation
     handlePrevPatient,
@@ -216,6 +241,7 @@ export const usePatientManagement = (): UsePatientManagementReturn => {
     currentPatientId,
     currentPatientIndex,
     canNavigatePrev,
-    canNavigateNext
+    canNavigateNext,
+    isCurrentPatientDummy
   };
 };

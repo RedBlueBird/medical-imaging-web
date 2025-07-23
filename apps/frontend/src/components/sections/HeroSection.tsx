@@ -90,7 +90,7 @@ const HeroSection: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <FloatingAsset delay={1.0} amplitude={20}>
                 <button 
-                  onClick={() => handleNavigation('/immunohistochemistry')}
+                  // onClick={() => handleNavigation('/immunohistochemistry')}
                   className="w-full transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                 >
                   <GlassCard className="w-full h-40 p-6 hover:bg-white/20 transition-colors duration-200">
@@ -106,7 +106,7 @@ const HeroSection: React.FC = () => {
               
               <FloatingAsset delay={1.25} amplitude={18}>
                 <button 
-                  onClick={() => handleNavigation('/chemotherapy')}
+                  // onClick={() => handleNavigation('/chemotherapy')}
                   className="w-full transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-xl"
                 >
                   <GlassCard className="w-full h-40 p-6 hover:bg-white/20 transition-colors duration-200">

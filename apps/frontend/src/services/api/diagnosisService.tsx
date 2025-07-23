@@ -42,8 +42,8 @@ class OralDiagnosisService {
   async analyzeOralImage(patientId: string, imageFile: File): Promise<OralDiagnosisResponse> {
     try {
       // First upload the image
-      // const uploadResult = await this.uploadImage(imageFile);
-      const uploadResult = {imageUrl: 'https://picsum.photos/200/300', filename: imageFile.name}; // Mocked upload result for testing
+      const uploadResult = await this.uploadImage(imageFile);
+      // const uploadResult = {imageUrl: 'https://picsum.photos/200/300', filename: imageFile.name}; // Mocked upload result for testing
 
       // Then send for analysis
       const analysisRequest: OralDiagnosisRequest = {

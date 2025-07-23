@@ -1,7 +1,7 @@
 // hooks/useOralDiagnosis.ts
 import { useState, useCallback } from 'react';
 import { DetectionResults } from '@/types/oral';
-import { oralDiagnosisService } from '@/services/api/oralDiagnosisService';
+import { oralDiagnosisService } from '@/services/api/diagnosisService';
 import { OralDiagnosisResponse } from '@/types/oral';
 import { usePatientManagement } from '@/hooks/usePatientManagement';
 
@@ -77,6 +77,8 @@ export const useOralDiagnosis = (): UseOralDiagnosisReturn => {
     setDetectionResults(null);
     setDiagnosisResponse(null);
     setError(null);
+
+    patientManagement.addDummyPatient();
   }, []);
   
   const handleDetectionStart = useCallback(async () => {
